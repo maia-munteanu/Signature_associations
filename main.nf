@@ -15,7 +15,6 @@ workflow {
                         .map { text -> text.readLines().get(0) }
                         .map { header -> header.split('\t')[3..-1] }
                         .flatMap { it.toList() } 
-                        .view()
     get_model(signatures)
 }
 
