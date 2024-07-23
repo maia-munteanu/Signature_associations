@@ -8,13 +8,27 @@ nextflow.enable.dsl=2
 params.input_file = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/GermlineMuts_signatures_indels.tsv"
 params.output_folder = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/GLMnb_NoCovs_RawExp"
 params.model = "GLMnb"
-
+/*
 workflow {
     signatures = Channel.fromPath(params.input_file)
                         .map { file -> file.text }
                         .map { text -> text.readLines().get(0) }
                         .map { header -> header.split('\t')[3..-1] }
                         .flatMap { it.toList() } 
+    get_model(signatures)
+}
+*/
+
+workflow {
+    signatures = Channel.fromPath(params.input_file)
+                        .map { file ->
+                            file.eachLine { line ->
+                                return line 
+                            }
+                        }
+                        .map { header -> header.split('\t')[3..-1] } // Split the header and take from 4th column
+                        .flatMap { it.toList() } // Flatten to individual elements
+    
     get_model(signatures)
 }
 
