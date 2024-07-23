@@ -23,4 +23,4 @@ for (gene in unique(germline$Gene.refGene)){
     p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|z|)"]
     results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value))}
     results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
-    write.table(results, file = paste0("GLMnb_", output_info,"_", signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
+    write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
