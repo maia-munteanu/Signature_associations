@@ -35,7 +35,7 @@ process get_model {
 
     script:
     """
-    echo "Processing column: ${signature}"
+    Rscript !{baseDir}/get_model.R ${signature} ${params.input_file} "testing"
     """
 }
 
