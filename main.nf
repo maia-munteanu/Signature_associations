@@ -21,9 +21,15 @@ workflow {
 
 workflow {
     signatures = Channel.fromPath(params.input_file)
-        .first() 
-        .map { file -> file.withReader { reader -> reader.readLine() }}
-        .map { header ->  header.split('\t')[3..-1] // Split the header and take from 4th column  }
+        .first()
+        .map { file -> 
+            file.withReader { reader -> 
+                reader.readLine() 
+            }
+        }
+        .map { header -> 
+            header.split('\t')[3..-1] 
+        }
         .flatMap { it.toList() } 
 
     test(signatures)
