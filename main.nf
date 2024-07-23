@@ -6,7 +6,7 @@
 nextflow.enable.dsl=2
 
 params.input_file = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/test.tsv"
-params.input_folder = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/Test"
+params.output_folder = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/Test"
 params.model = "GLMnb"
 
 workflow {
@@ -25,8 +25,13 @@ process get_model {
     maxRetries 3
     memory { 15.GB * task.attempt }
 
+    publishDir params.output_folder, mode: 'copy', pattern: '*tsv'
+
     input:
     val signature
+
+    output:
+    path "*.tsv" 
 
     script:
     """
