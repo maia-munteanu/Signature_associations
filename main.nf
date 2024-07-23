@@ -20,6 +20,9 @@ workflow {
 
 process get_model {
     tag "${signature}"
+    errorStrategy 'retry'
+    maxRetries 3
+    memory { 15.GB * task.attempt }
 
     input:
     val signature
