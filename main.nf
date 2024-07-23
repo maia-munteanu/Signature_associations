@@ -9,27 +9,23 @@ params.input_file = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/te
 params.input_folder = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/Test"
 params.model = "GLMnb"
 
-header_ch = Channel.fromPath(params.input_file)
-                    .map { file -> file.text }
-                    .map { text -> text.readLines().get(0) } // Read only the header line
-                    .map { header -> header.split('\t')[3..-1] } // Split header and take from 4th column
-
-header_ch.splitCsv(sep: '\t', strip: true).flatMap().set { columns }
+workflow {
+    header_ch = Channel.fromPath(params.input_file)
+                        .map { file -> file.text }
+                        .map { text -> text.readLines().get(0) }
+                        .map { header -> header.split('\t')[3..-1] }
+    OperateOnColumns(header_ch)
+}
 
 process OperateOnColumns {
     tag "${column}"
 
     input:
-    val column from columns
+    val column
 
     script:
     """
     echo "Processing column: ${column}"
     """
 }
-
-workflow {
-    OperateOnColumns()
-}
-
 
