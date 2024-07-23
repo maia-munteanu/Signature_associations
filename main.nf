@@ -20,16 +20,33 @@ workflow {
 */
 
 workflow {
-    signatures = Channel.fromPath(params.input_file)
-                        .map { file ->
-                            file.eachLine { line ->
-                                return line 
-                            }
-                        }
-                        .map { header -> header.split('\t')[3..-1] } // Split the header and take from 4th column
-                        .flatMap { it.toList() } // Flatten to individual elements
-    
-    get_model(signatures)
+
+    Channel
+        .fromPath(params.input_file)
+        .first() // Ensures we only process the first line
+        .map { file ->
+            file.withReader { reader ->
+                reader.readLine() // Read only the first line
+            }
+        }
+        .map { header ->
+            header.split('\t')[3..-1] // Split the header and take from 4th column
+        }
+        .flatMap { it.toList() } // Flatten to individual elements
+        .set { signatures } // Set to a channel for downstream use
+
+    TestColumns(signatures)
+
+}
+
+process TestColumns {
+        input:
+        val column
+
+        script:
+        """
+        echo "Processing column: $column"
+        """
 }
 
 process get_model {
