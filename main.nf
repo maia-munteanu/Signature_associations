@@ -10,24 +10,24 @@ params.input_folder = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/
 params.model = "GLMnb"
 
 workflow {
-    header_ch = Channel.fromPath(params.input_file)
+    signatures = Channel.fromPath(params.input_file)
                         .map { file -> file.text }
                         .map { text -> text.readLines().get(0) }
                         .map { header -> header.split('\t')[3..-1] }
                         .flatMap { it.toList() } 
                         .view()
-    OperateOnColumns(header_ch)
+    get_model(signatures)
 }
 
-process OperateOnColumns {
-    tag "${column}"
+process get_model {
+    tag "${signature}"
 
     input:
-    val column
+    val signature
 
     script:
     """
-    echo "Processing column: ${column}"
+    echo "Processing column: ${signature}"
     """
 }
 
