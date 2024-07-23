@@ -13,8 +13,7 @@ workflow {
     signatures = Channel.fromPath(params.input_file)
                         .map { file -> file.text }
                         .map { text -> text.readLines().get(0) }
-                       // .map { header -> header.split('\t')[3..-1] }
-                        .map { header -> header.split('\t')[3..5] }
+                        .map { header -> header.split('\t')[3..-1] }
                         .flatMap { it.toList() } 
     get_model(signatures)
 }
