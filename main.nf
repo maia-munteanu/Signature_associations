@@ -5,8 +5,8 @@
 
 nextflow.enable.dsl=2
 
-params.input_file = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/test.tsv"
-params.output_folder = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/Test"
+params.input_file = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/GermlineMuts_signatures_indels.tsv"
+params.output_folder = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/GLMnb_NoCovs_RawExp"
 params.model = "GLMnb"
 
 workflow {
@@ -35,7 +35,7 @@ process get_model {
 
     script:
     """
-    Rscript ${baseDir}/get_model.R ${signature} ${params.input_file} "testing"
+    Rscript ${baseDir}/get_model.R ${signature} ${params.input_file} ${params.model}
     """
 }
 
