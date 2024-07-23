@@ -35,7 +35,7 @@ process get_model {
 
     script:
     """
-    Rscript !{baseDir}/get_model.R ${signature} ${params.input_file} "testing"
+    Rscript ${baseDir}/get_model.R ${signature} ${params.input_file} "testing"
     """
 }
 
