@@ -14,9 +14,11 @@ workflow {
                         .map { file -> file.text }
                         .map { text -> text.readLines().get(0) }
                         .map { header -> header.split('\t')[3..-1] }
-    OperateOnColumns(header_ch)
+                        .view()
+    //OperateOnColumns(header_ch)
 }
 
+/*
 process OperateOnColumns {
     tag "${column}"
 
@@ -28,4 +30,4 @@ process OperateOnColumns {
     echo "Processing column: ${column}"
     """
 }
-
+*/
