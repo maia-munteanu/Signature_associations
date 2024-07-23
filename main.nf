@@ -43,7 +43,7 @@ process test {
 
         script:
         """
-        echo "Processing column: $column"
+        echo "Processing column: ${signature}"
         """
 }
 
