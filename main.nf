@@ -20,14 +20,11 @@ workflow {
 */
 
 workflow {
-
-    Channel
-        .fromPath(params.input_file)
+    signatures = Channel.fromPath(params.input_file)
         .first() 
         .map { file -> file.withReader { reader -> reader.readLine() }}
         .map { header ->  header.split('\t')[3..-1] // Split the header and take from 4th column  }
-        .flatMap { it.toList() } // Flatten to individual elements
-        .set { signatures } // Set to a channel for downstream use
+        .flatMap { it.toList() } 
 
     test(signatures)
     get_model(signatures)
