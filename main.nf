@@ -1,7 +1,6 @@
 #! /usr/bin/env nextflow
 //vim: syntax=groovy -*- mode: groovy;-*-
 // Copyright (C) 2022 IRB Barcelona
-// example run: nextflow run ../nextflow_pipeline/Mutation_clustering/main3.nf --serial_genome /g/strcombio/fsupek_cancer1/SV_clusters_project/Test/hg19.fa.p
 
 nextflow.enable.dsl=2
 
