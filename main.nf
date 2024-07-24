@@ -23,17 +23,6 @@ workflow {
     get_model(signatures)
 }
 
-process test {
-        tag "${signature}"
-        input:
-        val signature
-
-        script:
-        """
-        echo "Processing column: ${signature}"
-        """
-}
-
 process get_model {
     tag "${signature}"
     errorStrategy 'retry'
