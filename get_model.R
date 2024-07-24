@@ -10,12 +10,11 @@ input <- as.character(args[2])
 output_info <- as.character(args[3])
 
 germline=as.data.frame(fread(input))
-germline %>% pivot_longer(cols = -c(sample, Gene.refGene, Freq), names_to = "Signatures", values_to = "Exposures") -> germline
-germline[which(germline$Signatures==signature),] -> germline
+germline %>% pivot_longer(cols = -c(sample, Gene.refGene, Freq), names_to = "Signature", values_to = "Exposures") %>% filter(Signature==signature) -> germline
 
 results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c())
 for (gene in unique(germline$Gene.refGene)){
-    df<-germline[which(germline$Gene.refGene == gene & germline$Signatures == signature),]
+    df<-germline[which(germline$Gene.refGene == gene),]
     df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
     model <- glm.nb(Exposures ~ Mutation_Score, data = df)
     beta <- coef(model)["Mutation_Score"]
