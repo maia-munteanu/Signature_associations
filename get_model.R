@@ -25,7 +25,7 @@ if (model=="GLMnb") {
         results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
         write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
 } else if (model=="LM"){
-        results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c())
+    results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c())
     for (gene in unique(germline$Gene.refGene)){
         df<-germline[which(germline$Gene.refGene == gene),]
         df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
