@@ -8,16 +8,6 @@ nextflow.enable.dsl=2
 params.input_file = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/GermlineMuts_signatures_indels.tsv"
 params.output_folder = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/GLMnb_NoCovs_RawExp"
 params.model = "GLMnb"
-/*
-workflow {
-    signatures = Channel.fromPath(params.input_file)
-                        .map { file -> file.text }
-                        .map { text -> text.readLines().get(0) }
-                        .map { header -> header.split('\t')[3..-1] }
-                        .flatMap { it.toList() } 
-    get_model(signatures)
-}
-*/
 
 workflow {
     signatures = Channel.fromPath(params.input_file)
@@ -63,7 +53,8 @@ process get_model {
 
     script:
     """
-    Rscript ${baseDir}/get_model.R ${signature} ${params.input_file} ${params.model}
+    awk -F '\t' -v sig="$signature" 'NR==1 {for(i=1;i<=NF;i++) if ($i == sig) colnum=i} NR>1 {print $1, $2, $3, $colnum}' OFS='\t' ${params.input_file} > signature_file.tsv    
+    Rscript ${baseDir}/get_model.R ${signature} signature_file.tsv ${params.model}
     """
 }
 
