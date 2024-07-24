@@ -21,8 +21,6 @@ workflow {
             header.split('\t')[3..-1] 
         }
         .flatMap { it.toList() } 
-
-    test(signatures)
     get_model(signatures)
 }
 
