@@ -53,7 +53,19 @@ process get_model {
 
     shell:
     '''
-    awk -F '\t' -v sig="!{signature}" 'NR==1 {for(i=1;i<=NF;i++) if ($i == sig) colnum=i} NR>1 {print $1, $2, $3, $colnum}' OFS='\t' !{params.input_file} > signature_file.tsv    
+    awk -F '\t' -v sig="!{signature}" '
+    NR==1 {
+        # Store the header line
+        header = $0
+        for(i=1; i<=NF; i++) {
+            if ($i == sig) colnum = i
+        }
+        print $1, $2, $3, sig
+    }
+    NR>1 {
+        print $1, $2, $3, $colnum
+    }
+    ' OFS='\t' !{params.input_file} > signature_file.tsv
     Rscript !{baseDir}/get_model.R !{signature} signature_file.tsv !{params.model}
     '''
 }
