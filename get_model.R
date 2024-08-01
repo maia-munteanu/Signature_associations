@@ -23,8 +23,8 @@ if (model=="GLMnb") {
         se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
         p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|z|)"]
         results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value))}
-        results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
-        write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
+    results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
+    write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
 } 
 
 if (model=="LM"){
@@ -37,7 +37,8 @@ if (model=="LM"){
         se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
         p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|t|)"]
         results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value))}
-        results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
+    results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
+    write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
 }
 
 if (model=="ZInb"){
@@ -50,7 +51,8 @@ if (model=="ZInb"){
         se <- summary(model)$coefficients$count["Mutation_Score", "Std. Error"]
         p_value <- summary(model)$coefficients$count["Mutation_Score", "Pr(>|z|)"]
         results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value))}
-        results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
+    results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
+    write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
 }
 
 if (model=="Hnb"){
@@ -64,5 +66,6 @@ if (model=="Hnb"){
         se <- summary(model)$coefficients$count["Mutation_Score", "Std. Error"]
         p_value <- summary(model)$coefficients$count["Mutation_Score", "Pr(>|z|)"]
         results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value))}
-        results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
+    results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
+    write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
 }
