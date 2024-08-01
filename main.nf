@@ -4,10 +4,9 @@
 
 nextflow.enable.dsl=2
 
-params.input_file = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/GermlineMuts_signatures_indels_relExp.tsv"
-params.output_folder = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/LM_NoCovs_RelExp"
-//params.model = "GLMnb"
-params.model = "LM"
+params.input_file = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/GermlineMuts_signatures_indels.tsv"
+params.output_folder = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/Hnb_NoCovs_RawExp"
+params.model = "Hnb"
 
 workflow {
     signatures = Channel.fromPath(params.input_file)
