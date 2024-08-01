@@ -4,6 +4,7 @@ library(foreach)
 library(doParallel)
 library(MASS)
 library(pscl)
+library(betareg)
 
 args=commandArgs(TRUE)
 signature <- as.character(args[1])
