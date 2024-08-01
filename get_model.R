@@ -8,12 +8,12 @@ library(pscl)
 args=commandArgs(TRUE)
 signature <- as.character(args[1])
 input <- as.character(args[2])
-output_info <- as.character(args[3])
+model_type <- as.character(args[3])
 
 germline=as.data.frame(fread(input))
 germline %>% pivot_longer(cols = -c(sample, Gene.refGene, Freq), names_to = "Signature", values_to = "Exposures") %>% filter(Signature==signature) -> germline
 
-if (model=="GLMnb") {
+if (model_type=="GLMnb") {
     results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c())
     for (gene in unique(germline$Gene.refGene)){
         df<-germline[which(germline$Gene.refGene == gene),]
@@ -27,7 +27,7 @@ if (model=="GLMnb") {
     write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
 } 
 
-if (model=="LM"){
+if (model_type=="LM"){
     results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c())
     for (gene in unique(germline$Gene.refGene)){
         df<-germline[which(germline$Gene.refGene == gene),]
@@ -41,7 +41,7 @@ if (model=="LM"){
     write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
 }
 
-if (model=="ZInb"){
+if (model_type=="ZInb"){
     results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c())
     for (gene in unique(germline$Gene.refGene)){
         df<-germline[which(germline$Gene.refGene == gene),]
@@ -55,7 +55,7 @@ if (model=="ZInb"){
     write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
 }
 
-if (model=="Hnb"){
+if (model_type=="Hnb"){
     results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c())
     for (gene in unique(germline$Gene.refGene)){
         df<-germline[which(germline$Gene.refGene == gene),]
