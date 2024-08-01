@@ -46,7 +46,7 @@ if (model=="ZInb"){
     for (gene in unique(germline$Gene.refGene)){
         df<-germline[which(germline$Gene.refGene == gene),]
         df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
-        model <- zeroinfl(Exposures ~ Mutation_Score | Mutation_Score, data = data, dist = "negbin")
+        model <- zeroinfl(Exposures ~ Mutation_Score | Mutation_Score, data = df, dist = "negbin")
         beta <- coef(model)["count_Mutation_Score"]
         se <- summary(model)$coefficients$count["Mutation_Score", "Std. Error"]
         p_value <- summary(model)$coefficients$count["Mutation_Score", "Pr(>|z|)"]
@@ -60,8 +60,7 @@ if (model=="Hnb"){
     for (gene in unique(germline$Gene.refGene)){
         df<-germline[which(germline$Gene.refGene == gene),]
         df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
-
-        model <- hurdle(Exposures ~ Mutation_Score | Mutation_Score, data = data, dist = "negbin")
+        model <- hurdle(Exposures ~ Mutation_Score | Mutation_Score, data = df, dist = "negbin")
         beta <- coef(model)["count_Mutation_Score"]
         se <- summary(model)$coefficients$count["Mutation_Score", "Std. Error"]
         p_value <- summary(model)$coefficients$count["Mutation_Score", "Pr(>|z|)"]
