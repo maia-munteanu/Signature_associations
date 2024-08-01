@@ -68,3 +68,20 @@ if (model_type=="Hnb"){
     results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
     write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
 }
+
+if (model_type=="beta"){
+    results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c())
+    for (gene in unique(germline$Gene.refGene)){
+        df<-germline[which(germline$Gene.refGene == gene),]
+        df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
+        df$Exposures[df$Exposures == 0] <- df$Exposures[df$Exposures == 0] + 0.00001
+        df$Exposures[df$Exposures == 1] <- df$Exposures[df$Exposures == 1] - 0.00001
+        model <- betareg(Exposures ~ Mutation_Score, data = data)
+        beta <- coef(model)["Mutation_Score"]
+        se <- summary(model)$coefficients$mean["Mutation_Score", "Std. Error"]
+        p_value <- summary(model)$coefficients$mean["Mutation_Score", "Pr(>|z|)"]
+        results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value))}
+    results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
+    write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
+}
+
