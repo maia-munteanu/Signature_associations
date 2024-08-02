@@ -29,7 +29,7 @@ process get_model {
     maxRetries 3
     memory { 5.GB * task.attempt }
 
-    publishDir params.output_folder, mode: 'copy', pattern: "${name}.tsv"
+    publishDir params.output_folder, mode: 'copy', pattern: "${signature}.tsv"
 
     input:
     val signature
