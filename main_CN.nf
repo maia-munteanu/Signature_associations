@@ -8,6 +8,7 @@ params.input_file = "/g/strcombio/fsupek_cancer3/SV_clusters_project/CNA_genes/G
 params.metadata = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Pipeline_inputs/Hartwig_PCAWG_TCGA_MMRF_CPTAC_OVCARE_MUTes.tsv"
 params.output_folder = "/g/strcombio/fsupek_cancer3/SV_clusters_project/CNA_genes/Hnb_NoCovs_RawExp"
 params.model = "Hnb"
+params.covariates = "TRUE"
 
 workflow {
     signatures = Channel.fromPath(params.input_file)
@@ -53,6 +54,6 @@ process get_model {
         print $1, $2, $3, $colnum
     }
     ' OFS='\t' !{params.input_file} > signature_file.tsv
-    Rscript !{baseDir}/get_model_CN.R !{signature} signature_file.tsv !{params.model}
+    Rscript !{baseDir}/get_model_CN.R !{signature} signature_file.tsv !{params.model} !{params.metadata} !{params.covariates}
     '''
 }
