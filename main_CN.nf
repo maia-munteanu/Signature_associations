@@ -20,7 +20,7 @@ workflow {
             }
         }
         .map { header -> 
-            header.split('\t')[3..-1] 
+            header.split('\t')[1..-1] 
         }
         .flatMap { it.toList() } 
     get_model(signatures)
