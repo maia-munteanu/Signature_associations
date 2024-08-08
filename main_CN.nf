@@ -31,6 +31,7 @@ process get_model {
     errorStrategy 'retry'
     maxRetries 3
     memory { 10.GB * task.attempt }
+    time = 24.h
 
     //publishDir params.output_folder, mode: 'copy', pattern: "${signature}_amp.tsv"
     publishDir params.output_folder, mode: 'copy', pattern: "${signature}_amp.tsv,${signature}_del.tsv"
