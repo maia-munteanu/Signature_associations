@@ -8,8 +8,13 @@ library(betareg)
 
 args=commandArgs(TRUE)
 signature <- as.character(args[1])
+exposures <- as.data.frame(fread(args[2]))
+
+
 input <- as.character(args[2])
 model_type <- as.character(args[3])
+
+!{signature} !{params.sig_file} !{params.metadata} !{params.model} !{params.covariates}
 
 germline=as.data.frame(fread(input))
 germline %>% pivot_longer(cols = -c(sample, Gene.refGene, Freq), names_to = "Signature", values_to = "Exposures") %>% filter(Signature==signature) -> germline
