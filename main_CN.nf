@@ -4,9 +4,10 @@
 
 nextflow.enable.dsl=2
 
-params.input_file = "/g/strcombio/fsupek_cancer3/SV_clusters_project/CNA_genes/GermlineMuts_signatures_indels.tsv"
+params.sig_file = "/g/strcombio/fsupek_cancer3/SV_clusters_project/CNA_genes/Indel_signatures_raw.tsv"
+params.cna_file = "/g/strcombio/fsupek_cancer3/SV_clusters_project/CNA_genes/CNA_by_gene_all_samples_restrained.tsv"
 params.metadata = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Pipeline_inputs/Hartwig_PCAWG_TCGA_MMRF_CPTAC_OVCARE_MUTes.tsv"
-params.output_folder = "/g/strcombio/fsupek_cancer3/SV_clusters_project/CNA_genes/Hnb_NoCovs_RawExp"
+params.output_folder = "/g/strcombio/fsupek_cancer3/SV_clusters_project/CNA_genes/"
 params.model = "Hnb"
 params.covariates = "TRUE"
 
