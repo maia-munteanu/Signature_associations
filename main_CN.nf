@@ -12,7 +12,7 @@ params.model = "Hnb"
 params.covariates = "TRUE"
 
 workflow {
-    signatures = Channel.fromPath(params.input_file)
+    signatures = Channel.fromPath(params.sig_file)
         .first()
         .map { file -> 
             file.withReader { reader -> 
