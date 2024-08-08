@@ -42,6 +42,6 @@ process get_model {
 
     shell:
     '''
-    Rscript !{baseDir}/get_model_CN.R !{signature} !{params.sig_file} !{params.metadata} !{params.model} !{params.covariates}
+    Rscript !{baseDir}/get_model_CN.R !{signature} !{params.sig_file} !{params.cna_file} !{params.metadata} !{params.model} !{params.covariates}
     '''
 }
