@@ -30,7 +30,7 @@ process get_model {
     tag "${signature}"
     errorStrategy 'retry'
     maxRetries 3
-    memory { 10.GB * task.attempt }
+    memory { 20.GB * task.attempt }
     time = 24.h
 
     //publishDir params.output_folder, mode: 'copy', pattern: "${signature}_amp.tsv"
