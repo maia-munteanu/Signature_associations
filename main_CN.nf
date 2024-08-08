@@ -42,7 +42,6 @@ process get_model {
 
     shell:
     '''
-    echo !{signature}
-    #Rscript !{baseDir}/get_model_CN.R !{signature} signature_file.tsv !{params.model} !{params.metadata} !{params.covariates}
+    Rscript !{baseDir}/get_model_CN.R !{signature} !{params.sig_file} !{params.metadata} !{params.model} !{params.covariates}
     '''
 }
