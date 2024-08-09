@@ -15,7 +15,6 @@ model_type <- as.character(args[5])
 covariates <- as.logical(args[6])
 
 exposures<-exposures[,c("sample",signature)] 
-
 cna_pcs %>% pivot_longer(cols=c(-sample)) %>% left_join(metadata[,c("sample","gender","purity","ploidy","msStatus","tmbStatus","LizaCancerType")]) %>% dplyr::filter(sample %in% exposures$sample)  %>% left_join(exposures) -> cna_pcs
 colnames(cna_pcs)<-c("sample","PC","PC_value","gender","purity","ploidy","msStatus","tmbStatus","LizaCancerType","Exposures")
 
