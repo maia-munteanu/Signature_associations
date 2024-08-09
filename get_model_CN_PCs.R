@@ -24,7 +24,7 @@ if (covariates){
       for (PC in unique(cna_pcs$PC)){
         df<-cna_pcs[which(cna_pcs$PC == PC),]
         df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"
-        model <- glm.nb(Exposures ~ PC_value + LizaCancerType + gender + purity + ploidy + tmbStatus + msStatus, data = df)
+        model <- glm.nb(Exposures ~ PC_value + LizaCancerType + gender + purity + tmbStatus + msStatus, data = df)
         beta <- coef(model)["PC_value"]
         se <- summary(model)$coefficients["PC_value", "Std. Error"]
         p_value <- summary(model)$coefficients["PC_value", "Pr(>|z|)"]
@@ -40,7 +40,7 @@ if (covariates){
         df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"
         df$Exposures[df$Exposures == 0] <- df$Exposures[df$Exposures == 0] + 0.00001
         df$Exposures[df$Exposures == 1] <- df$Exposures[df$Exposures == 1] - 0.00001
-        model <- betareg(Exposures ~ PC_value + LizaCancerType + gender + purity + ploidy + tmbStatus + msStatus, data = df)
+        model <- betareg(Exposures ~ PC_value + LizaCancerType + gender + purity + tmbStatus + msStatus, data = df)
         beta <- coef(model)["PC_value"]
         se <- summary(model)$coefficients$mean["PC_value", "Std. Error"]
         p_value <- summary(model)$coefficients$mean["PC_value", "Pr(>|z|)"]

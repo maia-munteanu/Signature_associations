@@ -26,7 +26,7 @@ if (covariates){
           df<-cna[which(cna$gene == gene),]
           df$CN <- ifelse(df$CN > 0, df$CN, 0)
           df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"
-          model <- glm.nb(Exposures ~ CN + LizaCancerType + gender + purity + ploidy + tmbStatus + msStatus, data = df)
+          model <- glm.nb(Exposures ~ CN + LizaCancerType + gender + purity + tmbStatus + msStatus, data = df)
           beta <- coef(model)["CN"]
           se <- summary(model)$coefficients["CN", "Std. Error"]
           p_value <- summary(model)$coefficients["CN", "Pr(>|z|)"]
@@ -39,7 +39,7 @@ if (covariates){
         df<-cna[which(cna$gene == gene),]
         df$CN <- ifelse(df$CN < 0, df$CN, 0)
         df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"
-        model <- glm.nb(Exposures ~ CN + LizaCancerType + gender + purity + ploidy + tmbStatus + msStatus, data = df)
+        model <- glm.nb(Exposures ~ CN + LizaCancerType + gender + purity + tmbStatus + msStatus, data = df)
         beta <- coef(model)["CN"]
         se <- summary(model)$coefficients["CN", "Std. Error"]
         p_value <- summary(model)$coefficients["CN", "Pr(>|z|)"]
@@ -56,7 +56,7 @@ if (covariates){
           df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"
           df$Exposures[df$Exposures == 0] <- df$Exposures[df$Exposures == 0] + 0.00001
           df$Exposures[df$Exposures == 1] <- df$Exposures[df$Exposures == 1] - 0.00001
-          model <- betareg(Exposures ~ CN + LizaCancerType + gender + purity + ploidy + tmbStatus + msStatus, data = df)
+          model <- betareg(Exposures ~ CN + LizaCancerType + gender + purity + tmbStatus + msStatus, data = df)
           beta <- coef(model)["CN"]
           se <- summary(model)$coefficients$mean["CN", "Std. Error"]
           p_value <- summary(model)$coefficients$mean["CN", "Pr(>|z|)"]
@@ -71,7 +71,7 @@ if (covariates){
         df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"
         df$Exposures[df$Exposures == 0] <- df$Exposures[df$Exposures == 0] + 0.00001
         df$Exposures[df$Exposures == 1] <- df$Exposures[df$Exposures == 1] - 0.00001
-        model <- betareg(Exposures ~ CN + LizaCancerType + gender + purity + ploidy + tmbStatus + msStatus, data = df)
+        model <- betareg(Exposures ~ CN + LizaCancerType + gender + purity + tmbStatus + msStatus, data = df)
         beta <- coef(model)["CN"]
         se <- summary(model)$coefficients$mean["CN", "Std. Error"]
         p_value <- summary(model)$coefficients$mean["CN", "Pr(>|z|)"]
