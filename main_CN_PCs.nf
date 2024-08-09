@@ -34,7 +34,6 @@ process get_model {
     time = 24.h
 
     publishDir params.output_folder, mode: 'copy', pattern: "${signature}.tsv"
-    publishDir params.output_folder, mode: 'copy', pattern: "${signature}.tsv"
 
     input:
     val signature
