@@ -28,14 +28,13 @@ workflow {
 
 process get_model {
     tag "${signature}"
-    errorStrategy 'retry'
+    errorStrategy { task.attempt < 3 ? 'retry' : 'ignore' }
     maxRetries 3
     memory { 30.GB + (10.GB * (task.attempt - 1)) }
     time = 24.h
 
     publishDir params.output_folder, mode: 'copy', pattern: "${signature}_amp.tsv"
     publishDir params.output_folder, mode: 'copy', pattern: "${signature}_del.tsv"
-    //publishDir params.output_folder, mode: 'copy', pattern: "${signature}_amp.tsv,${signature}_del.tsv"
 
     input:
     val signature
@@ -45,6 +44,6 @@ process get_model {
 
     shell:
     '''
-    Rscript !{baseDir}/get_model_CN.R !{signature} !{params.sig_file} !{params.cna_file} !{params.metadata} !{params.model} !{params.covariates} !{params.output_folder}
+    Rscript !{baseDir}/get_model_CN.R !{signature} !{params.sig_file} !{params.cna_file} !{params.metadata} !{params.model} !{params.covariates}
     '''
 }
