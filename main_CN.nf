@@ -29,12 +29,13 @@ workflow {
 process get_model {
     tag "${signature}"
     errorStrategy 'retry'
-    maxRetries 1
-    memory { 40.GB + (20.GB * (task.attempt - 1)) }
+    maxRetries 3
+    memory { 30.GB + (10.GB * (task.attempt - 1)) }
     time = 24.h
 
-    //publishDir params.output_folder, mode: 'copy', pattern: "${signature}_amp.tsv"
-    publishDir params.output_folder, mode: 'copy', pattern: "${signature}_amp.tsv,${signature}_del.tsv"
+    publishDir params.output_folder, mode: 'copy', pattern: "${signature}_amp.tsv"
+    publishDir params.output_folder, mode: 'copy', pattern: "${signature}_del.tsv"
+    //publishDir params.output_folder, mode: 'copy', pattern: "${signature}_amp.tsv,${signature}_del.tsv"
 
     input:
     val signature
