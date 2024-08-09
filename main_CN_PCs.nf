@@ -28,7 +28,7 @@ workflow {
 
 process get_model {
     tag "${signature}"
-    errorStrategy 'retry'
+    errorStrategy { task.attempt < 3 ? 'retry' : 'ignore' }
     maxRetries 3
     memory { 30.GB + (10.GB * (task.attempt - 1)) }
     time = 24.h
@@ -39,7 +39,7 @@ process get_model {
     val signature
 
     output:
-    path "*.tsv" 
+    path "*.tsv" optional true
 
     shell:
     '''
