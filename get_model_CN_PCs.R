@@ -16,6 +16,10 @@ covariates <- as.logical(args[6])
 output <- as.character(args[7])
 
 exposures<-exposures[,c("sample",signature)] 
+
+cna_pcs %>% pivot_longer(cols=c(-Sample)) %>% left_join(metadata[,c("sample","gender","purity","ploidy","msStatus","tmbStatus","LizaCancerType")], by=c("Sample"="sample")) -> PCs
+
+
 cna %>% pivot_longer(cols=-c(chromosome,start,end,gene),names_to="sample",values_to="Freq") %>% dplyr::select(sample, gene, Freq) %>% 
   dplyr::filter(sample %in% exposures$sample) %>% left_join(exposures) %>% left_join(metadata[,c("sample","gender","purity","ploidy","msStatus","tmbStatus","LizaCancerType")]) -> cna
 colnames(cna)<-c("sample","gene","CN","Exposures","gender","purity","ploidy","msStatus","tmbStatus","LizaCancerType")
