@@ -13,7 +13,6 @@ cna <- as.data.frame(fread(args[3]))
 metadata <- as.data.frame(fread(args[4])); metadata$LizaCancerType=gsub("_MSI","",metadata$LizaCancerType)
 model_type <- as.character(args[5])
 covariates <- as.logical(args[6])
-output <- as.character(args[7])
 
 exposures<-exposures[,c("sample",signature)] 
 cna %>% pivot_longer(cols=-c(chromosome,start,end,gene),names_to="sample",values_to="Freq") %>% dplyr::select(sample, gene, Freq) %>% 
