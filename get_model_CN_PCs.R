@@ -41,7 +41,7 @@ if (covariates){
         model <- glm(Exposures ~ PC_value + LizaCancerType + gender + purity + tmbStatus + msStatus, data = df, family = gaussian())
         beta <- coef(model)["PC_value"]
         se <- summary(model)$coefficients["PC_value", "Std. Error"]
-        p_value <- summary(model)$coefficients["PC_value", "Pr(>|z|)"]
+        p_value <- summary(model)$coefficients["PC_value", "Pr(>|t|)"]
         results<-rbind(results,data.frame(Signature = signature, PC = PC, Beta = beta, SE = se, P_Value = p_value))}
       results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
       write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
@@ -55,7 +55,7 @@ if (covariates){
         model <- glm(sqrt(Exposures) ~ PC_value + LizaCancerType + gender + purity + tmbStatus + msStatus, data = df, family = gaussian())
         beta <- coef(model)["PC_value"]
         se <- summary(model)$coefficients["PC_value", "Std. Error"]
-        p_value <- summary(model)$coefficients["PC_value", "Pr(>|z|)"]
+        p_value <- summary(model)$coefficients["PC_value", "Pr(>|t|)"]
         results<-rbind(results,data.frame(Signature = signature, PC = PC, Beta = beta, SE = se, P_Value = p_value))}
       results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
       write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
