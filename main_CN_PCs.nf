@@ -8,7 +8,7 @@ params.sig_file = "/g/strcombio/fsupek_cancer3/SV_clusters_project/CNA_genes/Ind
 params.cna_file = "/g/strcombio/fsupek_cancer3/SV_clusters_project/CNA_genes/PCA_version2/CNA_sPCA_ind_1e-04_100.txt"
 params.metadata = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Pipeline_inputs/Hartwig_PCAWG_TCGA_MMRF_CPTAC_OVCARE_MUTes.tsv"
 params.output_folder = "/g/strcombio/fsupek_cancer3/SV_clusters_project/CNA_genes/GLMg_Covs_RelExp_CNPCs_100"
-params.model = "GLMgv"
+params.model = "GLMg"
 params.covariates = "TRUE"
 
 workflow {
