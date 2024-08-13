@@ -6,6 +6,7 @@ nextflow.enable.dsl=2
 
 params.input_file = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/GermlineMuts_signatures_indels.tsv"
 params.output_folder = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/Hnb_NoCovs_RawExp"
+params.metadata = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Pipeline_inputs/Hartwig_PCAWG_TCGA_MMRF_CPTAC_OVCARE_MUTes.tsv"
 params.model = "Hnb"
 
 workflow {
@@ -52,7 +53,7 @@ process get_model {
         print $1, $2, $3, $colnum
     }
     ' OFS='\t' !{params.input_file} > signature_file.tsv
-    Rscript !{baseDir}/get_model.R !{signature} signature_file.tsv !{params.model}
+    Rscript !{baseDir}/get_model.R !{signature} signature_file.tsv !{params.model} !{params.metadata}
     '''
 }
 
