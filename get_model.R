@@ -19,6 +19,7 @@ germline %>% left_join(metadata[,c("sample","gender","purity","ploidy","msStatus
 if (model_type=="GLMnb") {
     results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c())
     for (gene in unique(germline$Gene.refGene)){
+        print(gene)
         df<-germline[which(germline$Gene.refGene == gene),]
         df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
         df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"; df$LizaCancerType=factor(df$LizaCancerType)
