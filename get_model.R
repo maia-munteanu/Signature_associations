@@ -21,7 +21,8 @@ if (model_type=="GLMnb") {
     for (gene in unique(germline$Gene.refGene)){
         df<-germline[which(germline$Gene.refGene == gene),]
         df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
-        model <- glm.nb(Exposures ~ Mutation_Score + gender + purity + ploidy + msStatus + tmbStatus + LizaCancerType, data = df)
+        df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"; df$LizaCancerType=factor(df$LizaCancerType)
+        model <- glm.nb(Exposures ~ Mutation_Score + LizaCancerType + msStatus, data = df)
         beta <- coef(model)["Mutation_Score"]
         se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
         p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|z|)"]
@@ -35,7 +36,8 @@ if (model_type=="LM"){
     for (gene in unique(germline$Gene.refGene)){
         df<-germline[which(germline$Gene.refGene == gene),]
         df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
-        model <- lm(Exposures ~ Mutation_Score + gender + purity + ploidy + msStatus + tmbStatus + LizaCancerType, data = df)
+        df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"; df$LizaCancerType=factor(df$LizaCancerType)
+        model <- lm(Exposures ~ Mutation_Score + LizaCancerType + msStatus, data = df)
         beta <- coef(model)["Mutation_Score"]
         se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
         p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|t|)"]
@@ -49,9 +51,10 @@ if (model_type=="beta"){
     for (gene in unique(germline$Gene.refGene)){
         df<-germline[which(germline$Gene.refGene == gene),]
         df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
+        df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"; df$LizaCancerType=factor(df$LizaCancerType)
         df$Exposures[df$Exposures == 0] <- df$Exposures[df$Exposures == 0] + 0.00001
         df$Exposures[df$Exposures == 1] <- df$Exposures[df$Exposures == 1] - 0.00001
-        model <- betareg(Exposures ~ Mutation_Score + gender + purity + ploidy + msStatus + tmbStatus + LizaCancerType, data = df)
+        model <- betareg(Exposures ~ Mutation_Score + LizaCancerType + msStatus, data = df)
         beta <- coef(model)["Mutation_Score"]
         se <- summary(model)$coefficients$mean["Mutation_Score", "Std. Error"]
         p_value <- summary(model)$coefficients$mean["Mutation_Score", "Pr(>|z|)"]
