@@ -7,7 +7,6 @@ library(pscl)
 library(betareg)
 
 args=commandArgs(TRUE)
-args=c("SBS96A_InClu","Indel_signatures_raw.tsv","CNA_by_gene_all_samples_restrained.tsv","/g/strcombio/fsupek_cancer3/SV_clusters_project/Pipeline_inputs/Hartwig_PCAWG_TCGA_MMRF_CPTAC_OVCARE_MUTes.tsv","tes","test")
 
 signature <- as.character(args[1])
 exposures <- as.data.frame(fread(args[2]))
