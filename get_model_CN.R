@@ -26,12 +26,14 @@ if (model_type=="GLMglog2"){
     for (gene in unique(cna$gene)){
       df<-cna[which(cna$gene == gene),]
       df$CN <- ifelse(df$CN > 0, df$CN, 0)
-      df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"
-      model <- glm(log2(Exposures + 1) ~ CN + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender, family = gaussian(), data = df)
-      beta <- coef(model)["CN"]
-      se <- summary(model)$coefficients["CN", "Std. Error"]
-      p_value <- summary(model)$coefficients["CN", "Pr(>|t|)"]
-      results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value))}
+      if(nrow(df[which(df$CN > 0),])>=500){
+          df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"
+          df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"
+          model <- glm(log2(Exposures + 1) ~ CN + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender, family = gaussian(), data = df)
+          beta <- coef(model)["CN"]
+          se <- summary(model)$coefficients["CN", "Std. Error"]
+          p_value <- summary(model)$coefficients["CN", "Pr(>|t|)"]
+          results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value))}}
     results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
     write.table(results, file = paste0(signature, "_amp.tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
     
@@ -39,12 +41,14 @@ if (model_type=="GLMglog2"){
     for (gene in unique(cna$gene)){
       df<-cna[which(cna$gene == gene),]
       df$CN <- ifelse(df$CN < 0, df$CN, 0)
-      df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"
-      model <- glm(log2(Exposures + 1) ~ CN + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender, family = gaussian(), data = df)
-      beta <- coef(model)["CN"]
-      se <- summary(model)$coefficients["CN", "Std. Error"]
-      p_value <- summary(model)$coefficients["CN", "Pr(>|t|)"]
-      results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value))}
+      if(nrow(df[which(df$CN < 0),])>=500){
+        df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"
+        df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"
+        model <- glm(log2(Exposures + 1) ~ CN + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender, family = gaussian(), data = df)
+        beta <- coef(model)["CN"]
+        se <- summary(model)$coefficients["CN", "Std. Error"]
+        p_value <- summary(model)$coefficients["CN", "Pr(>|t|)"]
+        results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value))}}
     results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
     write.table(results, file = paste0(signature, "_del.tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
 }
@@ -54,14 +58,16 @@ if (model_type=="beta"){
     for (gene in unique(cna$gene)){
       df<-cna[which(cna$gene == gene),]
       df$CN <- ifelse(df$CN > 0, df$CN, 0)
-      df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"
-      df$Exposures[df$Exposures == 0] <- df$Exposures[df$Exposures == 0] + 0.00001
-      df$Exposures[df$Exposures == 1] <- df$Exposures[df$Exposures == 1] - 0.00001
-      model <- betareg(Exposures ~ CN + LizaCancerType + gender + purity + tmbStatus + msStatus, data = df)
-      beta <- coef(model)["CN"]
-      se <- summary(model)$coefficients$mean["CN", "Std. Error"]
-      p_value <- summary(model)$coefficients$mean["CN", "Pr(>|z|)"]
-      results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value))}
+      if(nrow(df[which(df$CN > 0),])>=500){
+          df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"
+          df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"
+          df$Exposures[df$Exposures == 0] <- df$Exposures[df$Exposures == 0] + 0.00001
+          df$Exposures[df$Exposures == 1] <- df$Exposures[df$Exposures == 1] - 0.00001
+          model <- betareg(Exposures ~ CN + LizaCancerType + gender + purity + tmbStatus + msStatus, data = df)
+          beta <- coef(model)["CN"]
+          se <- summary(model)$coefficients$mean["CN", "Std. Error"]
+          p_value <- summary(model)$coefficients$mean["CN", "Pr(>|z|)"]
+          results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value))}}
     results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
     write.table(results, file = paste0(signature, "_amp.tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
     
@@ -69,14 +75,16 @@ if (model_type=="beta"){
     for (gene in unique(cna$gene)){
       df<-cna[which(cna$gene == gene),]
       df$CN <- ifelse(df$CN < 0, df$CN, 0)
-      df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"
-      df$Exposures[df$Exposures == 0] <- df$Exposures[df$Exposures == 0] + 0.00001
-      df$Exposures[df$Exposures == 1] <- df$Exposures[df$Exposures == 1] - 0.00001
-      model <- betareg(Exposures ~ CN + LizaCancerType + gender + purity + tmbStatus + msStatus, data = df)
-      beta <- coef(model)["CN"]
-      se <- summary(model)$coefficients$mean["CN", "Std. Error"]
-      p_value <- summary(model)$coefficients$mean["CN", "Pr(>|z|)"]
-      results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value))}
+      if(nrow(df[which(df$CN < 0),])>=500){
+          df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"
+          df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"
+          df$Exposures[df$Exposures == 0] <- df$Exposures[df$Exposures == 0] + 0.00001
+          df$Exposures[df$Exposures == 1] <- df$Exposures[df$Exposures == 1] - 0.00001
+          model <- betareg(Exposures ~ CN + LizaCancerType + gender + purity + tmbStatus + msStatus, data = df)
+          beta <- coef(model)["CN"]
+          se <- summary(model)$coefficients$mean["CN", "Std. Error"]
+          p_value <- summary(model)$coefficients$mean["CN", "Pr(>|z|)"]
+          results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value))}}
     results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
     write.table(results, file = paste0(signature, "_del.tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
 }
