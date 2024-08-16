@@ -7,8 +7,8 @@ nextflow.enable.dsl=2
 params.sig_file = "/g/strcombio/fsupek_cancer3/SV_clusters_project/CNA_genes/Indel_signatures_raw.tsv"
 params.cna_file = "/g/strcombio/fsupek_cancer3/SV_clusters_project/CNA_genes/CNA_by_gene_all_samples_restrained.tsv"
 params.metadata = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Pipeline_inputs/Hartwig_PCAWG_TCGA_MMRF_CPTAC_OVCARE_MUTes.tsv"
-params.output_folder = "/g/strcombio/fsupek_cancer3/SV_clusters_project/CNA_genes/GLMnb_Covs_RawExp"
-params.model = "GLMnb"
+params.output_folder = "/g/strcombio/fsupek_cancer3/SV_clusters_project/CNA_genes/GLMglog2_Covs_RawExp"
+params.model = "GLMglog2"
 params.covariates = "TRUE"
 
 workflow {
