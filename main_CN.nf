@@ -31,7 +31,8 @@ process get_model {
     errorStrategy { task.attempt < 3 ? 'retry' : 'ignore' }
     maxRetries 3
     memory { 30.GB + (10.GB * (task.attempt - 1)) }
-    time = 24.h
+    time = 48.h
+    queue = { 'normal_prio_long' }
 
     publishDir params.output_folder, mode: 'copy', pattern: "${signature}_amp.tsv"
     publishDir params.output_folder, mode: 'copy', pattern: "${signature}_del.tsv"
