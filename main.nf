@@ -54,7 +54,7 @@ process get_model {
         print $1, $2, $3, $colnum
     }
     ' OFS='\t' !{params.input_file} > signature_file.tsv
-    Rscript !{baseDir}/get_model.R !{signature} signature_file.tsv !{params.model} !{params.metadata}
+    Rscript !{baseDir}/get_model.R !{signature} signature_file.tsv !{params.model} !{params.metadata} !{params.covariates}
     '''
 }
 
