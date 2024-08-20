@@ -25,10 +25,6 @@ cna %>% pivot_longer(cols=-c(chromosome,start,end,gene),names_to="sample",values
 colnames(cna)<-c("sample","gene","CN","Exposures","gender","purity","ploidy","msStatus","tmbStatus","LizaCancerType","primaryTumorLocation")
 left_join(cna,cna_pcs) -> cna
 
-formula_str <- paste("log2(Exposures + 1) ~ CN + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender", PC_columns, sep = " + ")
-model <- glm(as.formula(formula_str), family = gaussian(), data = df)
-
-
 if (model_type=="GLMglog2"){
     results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c())
     for (gene in unique(cna$gene)){
