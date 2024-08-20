@@ -11,6 +11,7 @@ signature <- as.character(args[1])
 input <- as.character(args[2])
 model_type <- as.character(args[3])
 metadata <- as.data.frame(fread(args[4])); metadata$LizaCancerType=gsub("_MSI","",metadata$LizaCancerType)
+covariates <- as.logical(args[5])
 
 germline=as.data.frame(fread(input))
 germline %>% pivot_longer(cols = -c(sample, Gene.refGene, Freq), names_to = "Signature", values_to = "Exposures") %>% filter(Signature==signature) -> germline
