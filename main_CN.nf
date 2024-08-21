@@ -32,7 +32,7 @@ process get_model {
     tag "${signature}"
     errorStrategy { task.attempt < 3 ? 'retry' : 'ignore' }
     maxRetries 3
-    memory { 30.GB + (10.GB * (task.attempt - 1)) }
+    memory { 40.GB + (10.GB * (task.attempt - 1)) }
     time = 48.h
     queue = { 'normal_prio_long' }
 
