@@ -14,7 +14,7 @@ metadata <- as.data.frame(fread(args[4])); metadata$LizaCancerType=gsub("_MSI","
 covariates <- as.logical(args[5])
 
 germline=as.data.frame(fread(input))
-germline %>% pivot_longer(cols = -c(sample, Gene.refGene, Freq), names_to = "Signature", values_to = "Exposures") %>% filter(Signature==signature) -> germline
+germline %>% pivot_longer(cols = -c(sample, Gene.refGene, Freq, Clustered, Unclustered), names_to = "Signature", values_to = "Exposures") %>% filter(Signature==signature) -> germline
 germline %>% left_join(metadata[,c("sample","gender","purity","ploidy","msStatus","tmbStatus","primaryTumorLocation")]) -> germline
 
 if (covariates) {
