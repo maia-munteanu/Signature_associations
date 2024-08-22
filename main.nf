@@ -19,7 +19,7 @@ workflow {
             }
         }
         .map { header -> 
-            header.split('\t')[3..-1] 
+            header.split('\t')[5..-1] 
         }
         .flatMap { it.toList() } 
     get_model(signatures)
@@ -48,10 +48,10 @@ process get_model {
         for(i=1; i<=NF; i++) {
             if ($i == sig) colnum = i
         }
-        print $1, $2, $3, sig
+        print $1, $2, $3, $4, $5, sig
     }
     NR>1 {
-        print $1, $2, $3, $colnum
+        print $1, $2, $3, $4, $5, $colnum
     }
     ' OFS='\t' !{params.input_file} > signature_file.tsv
     Rscript !{baseDir}/get_model.R !{signature} signature_file.tsv !{params.model} !{params.metadata} !{params.covariates}
