@@ -8,10 +8,10 @@ params.sig_file = "/g/strcombio/fsupek_cancer3/SV_clusters_project/CNA_genes/Ind
 params.cna_file = "/g/strcombio/fsupek_cancer3/SV_clusters_project/CNA_genes/CNA_by_gene_all_samples_restrained.tsv"
 params.pc_file = "/g/strcombio/fsupek_cancer3/SV_clusters_project/CNA_genes/PCA_version2/CNA_sPCA_ind_1e-04_100.txt"
 params.metadata = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Pipeline_inputs/Hartwig_PCAWG_TCGA_MMRF_CPTAC_OVCARE_MUTes.tsv"
-params.output_folder = "/g/strcombio/fsupek_cancer3/SV_clusters_project/CNA_genes/GLMglog2_Covs_RawExp_10PCs"
+params.output_folder = "/g/strcombio/fsupek_cancer3/SV_clusters_project/CNA_genes/GLMglog2_Covs_RawExp_100PCs"
 params.model = "GLMglog2"
 params.covariates = "TRUE"
-params.pcs = 10
+params.pcs = 100
 
 workflow {
     signatures = Channel.fromPath(params.sig_file)
