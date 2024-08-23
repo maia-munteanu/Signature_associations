@@ -6,6 +6,7 @@ library(MASS)
 library(pscl)
 library(betareg)
 library(arm)
+library(statmod)
 
 args=commandArgs(TRUE)
 signature <- as.character(args[1])
@@ -66,6 +67,22 @@ if (covariates) {
         results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
         write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
     } 
+     if (model_type=="Tweedielog2_logSum") {
+        results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c())
+        for (gene in unique(germline$Gene.refGene)){
+            print(gene)
+            df<-germline[which(germline$Gene.refGene == gene),]
+            df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
+            df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"; df$primaryTumorLocation=factor(df$primaryTumorLocation)
+            if (grepl("Clu",signature)){model <- glm(log2(Exposures + 1) ~ Mutation_Score + log(Clustered) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender,family = tweedie(var.power = 1.5, link.power = 1),  data = df)} 
+            else {model <- model <- glm(log2(Exposures + 1) ~ Mutation_Score + log(Unclustered) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender,family = tweedie(var.power = 1.5, link.power = 1),  data = df)}
+            beta <- coef(model)["Mutation_Score"]
+            se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
+            p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|t|)"]
+            results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value))}
+        results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
+        write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
+    } 
     if (model_type=="beta"){
         results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c())
         for (gene in unique(germline$Gene.refGene)){
@@ -119,6 +136,20 @@ if (covariates) {
             df<-germline[which(germline$Gene.refGene == gene),]
             df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
             if (grepl("Clu",signature)){model <- bayesglm(log2(Exposures + 1) ~ Mutation_Score + log(Clustered), family = gaussian(), data = df)} else {model <- bayesglm(log2(Exposures + 1) ~ Mutation_Score + log(Unclustered), family = gaussian(), data = df)}
+            beta <- coef(model)["Mutation_Score"]
+            se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
+            p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|t|)"]
+            results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value))}
+        results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
+        write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
+    } 
+    if (model_type=="Tweedielog2_logSum") {
+        results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c())
+        for (gene in unique(germline$Gene.refGene)){
+            print(gene)
+            df<-germline[which(germline$Gene.refGene == gene),]
+            df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
+            if (grepl("Clu",signature)){model <- glm(log2(Exposures + 1) ~ Mutation_Score + log(Clustered),family = tweedie(var.power = 1.5, link.power = 1),  data = df)} else {model <- model <- glm(log2(Exposures + 1) ~ Mutation_Score + log(Unclustered),family = tweedie(var.power = 1.5, link.power = 1),  data = df)}
             beta <- coef(model)["Mutation_Score"]
             se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
             p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|t|)"]
