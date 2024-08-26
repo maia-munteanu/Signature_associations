@@ -23,12 +23,12 @@ exposures<-exposures[,c("sample",signature)]
 cna %>% pivot_longer(cols=-c(chromosome,start,end,gene),names_to="sample",values_to="Freq") %>% dplyr::select(sample, gene, Freq) %>% 
   dplyr::filter(sample %in% exposures$sample) %>% left_join(exposures) %>% left_join(metadata[,c("sample","gender","purity","ploidy","msStatus","tmbStatus","LizaCancerType","primaryTumorLocation")]) -> cna
 colnames(cna)<-c("sample","gene","CN","Exposures","gender","purity","ploidy","msStatus","tmbStatus","LizaCancerType","primaryTumorLocation")
-left_join(cna,cna_pcs) -> cna
 
 if (model_type=="GLMglog2"){
     results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c())
     for (gene in unique(cna$gene)){
       df<-cna[which(cna$gene == gene),]
+      left_join(df,cna_pcs) -> df
       df$CN <- ifelse(df$CN > 0, df$CN, 0)
       if(nrow(df[which(df$CN > 0),])>=500){
           df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"
@@ -45,6 +45,7 @@ if (model_type=="GLMglog2"){
     results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c())
     for (gene in unique(cna$gene)){
       df<-cna[which(cna$gene == gene),]
+      left_join(df,cna_pcs) -> df
       df$CN <- ifelse(df$CN < 0, df$CN, 0)
       if(nrow(df[which(df$CN < 0),])>=500){
         df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"
@@ -63,6 +64,7 @@ if (model_type=="beta"){
     results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c())
     for (gene in unique(cna$gene)){
       df<-cna[which(cna$gene == gene),]
+      left_join(df,cna_pcs) -> df
       df$CN <- ifelse(df$CN > 0, df$CN, 0)
       if(nrow(df[which(df$CN > 0),])>=500){
           df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"
@@ -81,6 +83,7 @@ if (model_type=="beta"){
     results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c())
     for (gene in unique(cna$gene)){
       df<-cna[which(cna$gene == gene),]
+      left_join(df,cna_pcs) -> df
       df$CN <- ifelse(df$CN < 0, df$CN, 0)
       if(nrow(df[which(df$CN < 0),])>=500){
           df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"
