@@ -47,6 +47,8 @@ process get_model {
 
     shell:
     '''
-    Rscript !{baseDir}/get_model_CN.R !{signature} !{params.sig_file} !{params.cna_file} !{params.metadata} !{params.model} !{params.covariates} !{params.pc_file} !{params.pcs}
+    if [[ "!{signature}" == *"_InClu"* ]]; then
+        Rscript !{baseDir}/get_model_CN.R !{signature} !{params.sig_file} !{params.cna_file} !{params.metadata} !{params.model} !{params.covariates} !{params.pc_file} !{params.pcs}
+    fi
     '''
 }
