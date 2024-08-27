@@ -16,6 +16,8 @@ model_type <- as.character(args[5])
 covariates <- as.logical(args[6])
 cna_pcs <- read.table(args[7],row.names = 1); cna_pcs$sample=rownames(cna_pcs)
 nPCs=as.numeric(args[8])
+
+
 cna_pcs <- cna_pcs[,c("sample",paste0("Dim.",1:nPCs))]
 PC_columns <- paste(paste0("Dim.",1:nPCs), collapse = " + ")
 
