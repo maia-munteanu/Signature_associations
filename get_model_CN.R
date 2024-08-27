@@ -20,17 +20,18 @@ cna_pcs <- cna_pcs[,c("sample",paste0("Dim.",1:nPCs))]
 PC_columns <- paste(paste0("Dim.",1:nPCs), collapse = " + ")
 
 exposures$Clustered=rowSums(exposures[,grep("Clu",colnames(exposures),value=TRUE)])
-exposures<-exposures[,c("sample",signature,"Clustered")] 
-cna %>% pivot_longer(cols=-c(chromosome,start,end,gene),names_to="sample",values_to="Freq") %>% dplyr::select(sample, gene, Freq) %>% 
-  dplyr::filter(sample %in% exposures$sample) %>% left_join(exposures) %>% left_join(metadata[,c("sample","gender","purity","ploidy","msStatus","tmbStatus","LizaCancerType","primaryTumorLocation")]) -> cna
-colnames(cna)<-c("sample","gene","CN","Exposures","gender","purity","ploidy","msStatus","tmbStatus","LizaCancerType","primaryTumorLocation")
-left_join(cna,cna_pcs) -> cna
+exposures$Unclustered=rowSums(exposures[,grep("Uclu",colnames(exposures),value=TRUE)])
+exposures<-exposures[,c("sample",signature,"Clustered","Unclustered")] 
+colnames(exposures)<-c("sample","Exposures","Clustered","Unclustered")
+
+cna %>% pivot_longer(cols=-c(chromosome,start,end,gene),names_to="sample",values_to="Freq") %>% dplyr::select(sample, gene, Freq) %>% dplyr::filter(sample %in% exposures$sample) %>% setNames(c("sample","gene","CN")) -> cna
 
 if (model_type=="GLMglog2"){
     results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c())
     for (gene in unique(cna$gene)){
       df<-cna[which(cna$gene == gene),]
       df$CN <- ifelse(df$CN > 0, df$CN, 0)
+      df %>% left_join(exposures) %>% left_join(metadata[,c("sample","gender","purity","ploidy","msStatus","tmbStatus","LizaCancerType","primaryTumorLocation")]) %>% left_join(cna_pcs) -> df
       if(nrow(df[which(df$CN > 0),])>=500){
           df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"
           df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"
@@ -47,6 +48,7 @@ if (model_type=="GLMglog2"){
     for (gene in unique(cna$gene)){
       df<-cna[which(cna$gene == gene),]
       df$CN <- ifelse(df$CN < 0, df$CN, 0)
+      df %>% left_join(exposures) %>% left_join(metadata[,c("sample","gender","purity","ploidy","msStatus","tmbStatus","LizaCancerType","primaryTumorLocation")]) %>% left_join(cna_pcs) -> df
       if(nrow(df[which(df$CN < 0),])>=500){
         df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"
         df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"
@@ -65,6 +67,7 @@ if (model_type=="GLMglog2_logSum"){
   for (gene in unique(cna$gene)){
     df<-cna[which(cna$gene == gene),]
     df$CN <- ifelse(df$CN > 0, df$CN, 0)
+    df %>% left_join(exposures) %>% left_join(metadata[,c("sample","gender","purity","ploidy","msStatus","tmbStatus","LizaCancerType","primaryTumorLocation")]) %>% left_join(cna_pcs) -> df
     if(nrow(df[which(df$CN > 0),])>=500){
       df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"
       df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"
@@ -82,6 +85,7 @@ if (model_type=="GLMglog2_logSum"){
   for (gene in unique(cna$gene)){
     df<-cna[which(cna$gene == gene),]
     df$CN <- ifelse(df$CN < 0, df$CN, 0)
+    df %>% left_join(exposures) %>% left_join(metadata[,c("sample","gender","purity","ploidy","msStatus","tmbStatus","LizaCancerType","primaryTumorLocation")]) %>% left_join(cna_pcs) -> df
     if(nrow(df[which(df$CN < 0),])>=500){
       df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"
       df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"
@@ -102,6 +106,7 @@ if (model_type=="beta"){
     for (gene in unique(cna$gene)){
       df<-cna[which(cna$gene == gene),]
       df$CN <- ifelse(df$CN > 0, df$CN, 0)
+      df %>% left_join(exposures) %>% left_join(metadata[,c("sample","gender","purity","ploidy","msStatus","tmbStatus","LizaCancerType","primaryTumorLocation")]) %>% left_join(cna_pcs) -> df
       if(nrow(df[which(df$CN > 0),])>=500){
           df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"
           df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"
@@ -120,6 +125,7 @@ if (model_type=="beta"){
     for (gene in unique(cna$gene)){
       df<-cna[which(cna$gene == gene),]
       df$CN <- ifelse(df$CN < 0, df$CN, 0)
+      df %>% left_join(exposures) %>% left_join(metadata[,c("sample","gender","purity","ploidy","msStatus","tmbStatus","LizaCancerType","primaryTumorLocation")]) %>% left_join(cna_pcs) -> df
       if(nrow(df[which(df$CN < 0),])>=500){
           df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"
           df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"
