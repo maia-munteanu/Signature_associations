@@ -9,7 +9,7 @@ params.output_folder = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline
 params.metadata = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Pipeline_inputs/Hartwig_PCAWG_TCGA_MMRF_CPTAC_OVCARE_MUTes.tsv"
 params.model = "Tweedielog2_logSum"
 params.covariates = "TRUE"
-params.link_power = "1.5"
+params.var_power = "1.5"
 
 workflow {
     signatures = Channel.fromPath(params.input_file)
@@ -55,7 +55,7 @@ process get_model {
         print $1, $2, $3, $4, $5, $colnum
     }
     ' OFS='\t' !{params.input_file} > signature_file.tsv
-    Rscript !{baseDir}/get_model.R !{signature} signature_file.tsv !{params.model} !{params.metadata} !{params.covariates} !{params.link_power}
+    Rscript !{baseDir}/get_model.R !{signature} signature_file.tsv !{params.model} !{params.metadata} !{params.covariates} !{params.var_power}
     '''
 }
 
