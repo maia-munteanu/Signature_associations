@@ -75,7 +75,7 @@ if (covariates) {
             df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
             df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"; df$primaryTumorLocation=factor(df$primaryTumorLocation)
             if (grepl("Clu",signature)){model <- glm(log2(Exposures + 1) ~ Mutation_Score + log(Clustered) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender,family = tweedie(var.power = 1.5, link.power = 1),  data = df)} 
-            else {model <- model <- glm(log2(Exposures + 1) ~ Mutation_Score + log(Unclustered) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender,family = tweedie(var.power = 1.5, link.power = 1),  data = df)}
+            else {model <- glm(log2(Exposures + 1) ~ Mutation_Score + log(Unclustered) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender,family = tweedie(var.power = 1.5, link.power = 1),  data = df)}
             beta <- coef(model)["Mutation_Score"]
             se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
             p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|t|)"]
@@ -149,7 +149,7 @@ if (covariates) {
             print(gene)
             df<-germline[which(germline$Gene.refGene == gene),]
             df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
-            if (grepl("Clu",signature)){model <- glm(log2(Exposures + 1) ~ Mutation_Score + log(Clustered),family = tweedie(var.power = 1.5, link.power = 1),  data = df)} else {model <- model <- glm(log2(Exposures + 1) ~ Mutation_Score + log(Unclustered),family = tweedie(var.power = 1.5, link.power = 1),  data = df)}
+            if (grepl("Clu",signature)){model <- glm(log2(Exposures + 1) ~ Mutation_Score + log(Clustered),family = tweedie(var.power = 1.5, link.power = 1),  data = df)} else {model <- glm(log2(Exposures + 1) ~ Mutation_Score + log(Unclustered),family = tweedie(var.power = 1.5, link.power = 1),  data = df)}
             beta <- coef(model)["Mutation_Score"]
             se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
             p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|t|)"]
