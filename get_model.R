@@ -7,6 +7,8 @@ library(pscl)
 library(betareg)
 library(arm)
 library(statmod)
+library(mgcv)
+# library(tweedie, lib.loc="/g/strcombio/fsupek_home/mmunteanu/.conda/envs/SigProfilerAssignment/lib/R/library/")
 
 args=commandArgs(TRUE)
 signature <- as.character(args[1])
@@ -19,6 +21,11 @@ var_power <- as.numeric(args[6])
 germline=as.data.frame(fread(input))
 germline %>% pivot_longer(cols = -c(sample, Gene.refGene, Freq, Clustered, Unclustered), names_to = "Signature", values_to = "Exposures") %>% filter(Signature==signature) -> germline
 germline %>% left_join(metadata[,c("sample","gender","purity","ploidy","msStatus","tmbStatus","primaryTumorLocation")]) -> germline
+
+# bd.xi <- tweedie.profile(Exposures ~ Mutation_Score + offset(log(Clustered)) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender, data=df,do.plot=TRUE, xi.vec=seq(1.1,1.9,by=0.1))
+# bd.xi$xi.max
+# bd.m <- glm(Exposures ~ Mutation_Score + offset(log(Clustered)) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender, data=df,family=tweedie(link.power=0, var.power=bd.xi$xi.max))
+# qqnorm( resid(bd.m), las=1 ); qqline( resid(bd.m) )
 
 if (covariates) {
     if (model_type=="GLMglog2") {
@@ -83,6 +90,44 @@ if (covariates) {
             results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value))}
         results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
         write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
+     } 
+    if (model_type=="pTweedie_logoSum_pvar") {
+      results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c())
+      for (gene in unique(germline$Gene.refGene)){
+        print(gene)
+        df<-germline[which(germline$Gene.refGene == gene),]
+        df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
+        df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"; df$primaryTumorLocation=factor(df$primaryTumorLocation)
+        if (grepl("Clu",signature)){
+          p=as.numeric(sub(".*p=([0-9.]+).*", "\\1",gam(Exposures ~ Mutation_Score + offset(log(Clustered)) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender, data = df, family = tw(link="log"), method = "ML")$family$family))
+          model <- glm(Exposures ~ Mutation_Score + offset(log(Clustered)) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender,family = tweedie(var.power = p, link.power = 0),  data = df)} 
+        if (grepl("Uclu",signature)){
+          p=as.numeric(sub(".*p=([0-9.]+).*", "\\1",gam(Exposures ~ Mutation_Score + offset(log(Unclustered)) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender, data = df, family = tw(link="log"), method = "ML")$family$family))
+          model <- glm(Exposures ~ Mutation_Score + offset(log(Unclustered)) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender,family = tweedie(var.power = p, link.power = 0),  data = df)}
+        beta <- coef(model)["Mutation_Score"]
+        se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
+        p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|t|)"]
+        results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value))}
+      results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
+      write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
+    } 
+    if (model_type=="pGLM_logoSum") {
+      results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c())
+      for (gene in unique(germline$Gene.refGene)){
+        print(gene)
+        df<-germline[which(germline$Gene.refGene == gene),]
+        df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
+        df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"; df$primaryTumorLocation=factor(df$primaryTumorLocation)
+        if (grepl("Clu",signature)){
+          model <- glm(Exposures ~ Mutation_Score + offset(log(Clustered)) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender,family = poisson(),  data = df)} 
+        if (grepl("Uclu",signature)){
+          model <- glm(Exposures ~ Mutation_Score + offset(log(Unclustered)) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender,family = poisson(),  data = df)}
+        beta <- coef(model)["Mutation_Score"]
+        se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
+        p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|t|)"]
+        results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value))}
+      results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
+      write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
     } 
     if (model_type=="beta"){
         results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c())
