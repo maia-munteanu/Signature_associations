@@ -124,7 +124,7 @@ if (covariates) {
           model <- glm(Exposures ~ Mutation_Score + offset(log(Unclustered)) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender,family = poisson(),  data = df)}
         beta <- coef(model)["Mutation_Score"]
         se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
-        p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|t|)"]
+        p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|z|)"]
         results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value))}
       results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
       write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
@@ -142,7 +142,7 @@ if (covariates) {
           model <- bayesglm(Exposures ~ Mutation_Score + offset(log(Unclustered)) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender,family = poisson(),  data = df)}
         beta <- coef(model)["Mutation_Score"]
         se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
-        p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|t|)"]
+        p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|z|)"]
         results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value))}
       results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
       write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
