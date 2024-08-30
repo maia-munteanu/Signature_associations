@@ -34,7 +34,8 @@ if (covariates) {
             print(gene)
             df<-germline[which(germline$Gene.refGene == gene),]
             df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
-            df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"; df$primaryTumorLocation=factor(df$primaryTumorLocation)
+            df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"; df$primaryTumorLocation=factor(df$primaryTumorLocation); df$primaryTumorLocation = relevel(df$primaryTumorLocation, ref = "Other")
+            df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"; df$LizaCancerType=factor(df$LizaCancerType); df$LizaCancerType = relevel(df$LizaCancerType, ref = "Other")
             model <- glm(log2(Exposures + 1) ~ Mutation_Score + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender, family = gaussian(), data = df)
             beta <- coef(model)["Mutation_Score"]
             se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
@@ -49,7 +50,8 @@ if (covariates) {
             print(gene)
             df<-germline[which(germline$Gene.refGene == gene),]
             df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
-            df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"; df$primaryTumorLocation=factor(df$primaryTumorLocation)
+            df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"; df$primaryTumorLocation=factor(df$primaryTumorLocation); df$primaryTumorLocation = relevel(df$primaryTumorLocation, ref = "Other")
+            df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"; df$LizaCancerType=factor(df$LizaCancerType); df$LizaCancerType = relevel(df$LizaCancerType, ref = "Other")
             if (grepl("Clu",signature)){model <- glm(log2(Exposures + 1) ~ Mutation_Score + log(Clustered) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender, family = gaussian(), data = df)} 
             else {model <- glm(log2(Exposures + 1) ~ Mutation_Score + log(Unclustered) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender, family = gaussian(), data = df)}
             beta <- coef(model)["Mutation_Score"]
@@ -65,7 +67,8 @@ if (covariates) {
             print(gene)
             df<-germline[which(germline$Gene.refGene == gene),]
             df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
-            df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"; df$primaryTumorLocation=factor(df$primaryTumorLocation)
+            df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"; df$primaryTumorLocation=factor(df$primaryTumorLocation); df$primaryTumorLocation = relevel(df$primaryTumorLocation, ref = "Other")
+            df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"; df$LizaCancerType=factor(df$LizaCancerType); df$LizaCancerType = relevel(df$LizaCancerType, ref = "Other")
             if (grepl("Clu",signature)){model <- bayesglm(log2(Exposures + 1) ~ Mutation_Score + log(Clustered) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender, family = gaussian(), data = df)} 
             else {model <- bayesglm(log2(Exposures + 1) ~ Mutation_Score + log(Unclustered) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender, family = gaussian(), data = df)}
             beta <- coef(model)["Mutation_Score"]
@@ -81,7 +84,8 @@ if (covariates) {
             print(gene)
             df<-germline[which(germline$Gene.refGene == gene),]
             df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
-            df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"; df$primaryTumorLocation=factor(df$primaryTumorLocation)
+            df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"; df$primaryTumorLocation=factor(df$primaryTumorLocation); df$primaryTumorLocation = relevel(df$primaryTumorLocation, ref = "Other")
+            df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"; df$LizaCancerType=factor(df$LizaCancerType); df$LizaCancerType = relevel(df$LizaCancerType, ref = "Other")
             if (grepl("Clu",signature)){model <- glm(log2(Exposures + 1) ~ Mutation_Score + log(Clustered) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender,family = tweedie(var.power = var_power, link.power = 0),  data = df)} 
             else {model <- glm(log2(Exposures + 1) ~ Mutation_Score + log(Unclustered) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender,family = tweedie(var.power = var_power, link.power = 0),  data = df)}
             beta <- coef(model)["Mutation_Score"]
@@ -97,7 +101,8 @@ if (covariates) {
         print(gene)
         df<-germline[which(germline$Gene.refGene == gene),]
         df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
-        df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"; df$primaryTumorLocation=factor(df$primaryTumorLocation)
+        df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"; df$primaryTumorLocation=factor(df$primaryTumorLocation); df$primaryTumorLocation = relevel(df$primaryTumorLocation, ref = "Other")
+        df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"; df$LizaCancerType=factor(df$LizaCancerType); df$LizaCancerType = relevel(df$LizaCancerType, ref = "Other")
         if (grepl("Clu",signature)){
           p=as.numeric(sub(".*p=([0-9.]+).*", "\\1",gam(Exposures ~ Mutation_Score + offset(log(Clustered)) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender, data = df, family = tw(link="log"), method = "ML")$family$family))
           model <- glm(Exposures ~ Mutation_Score + offset(log(Clustered)) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender,family = tweedie(var.power = p, link.power = 0),  data = df)} 
@@ -111,13 +116,56 @@ if (covariates) {
       results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
       write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
     } 
+    if (model_type=="pTweedie_logoSum_pvar_2") {
+      results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c(), Power = c())
+      for (gene in unique(germline$Gene.refGene)){
+        print(gene)
+        df<-germline[which(germline$Gene.refGene == gene),]
+        df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
+        df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"; df$primaryTumorLocation=factor(df$primaryTumorLocation); df$primaryTumorLocation = relevel(df$primaryTumorLocation, ref = "Other")
+        df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"; df$LizaCancerType=factor(df$LizaCancerType); df$LizaCancerType = relevel(df$LizaCancerType, ref = "Other")
+        if (grepl("Clu",signature)){
+          p=as.numeric(sub(".*p=([0-9.]+).*", "\\1",gam(Exposures ~ Mutation_Score + offset(log(Clustered)) + primaryTumorLocation + msStatus + purity, data = df, family = tw(link="log"), method = "ML")$family$family))
+          model <- glm(Exposures ~ Mutation_Score + offset(log(Clustered)) + primaryTumorLocation + msStatus + purity, family = tweedie(var.power = p, link.power = 0),  data = df)} 
+        if (grepl("Uclu",signature)){
+          p=as.numeric(sub(".*p=([0-9.]+).*", "\\1",gam(Exposures ~ Mutation_Score + offset(log(Unclustered)) + primaryTumorLocation + msStatus + purity, data = df, family = tw(link="log"), method = "ML")$family$family))
+          model <- glm(Exposures ~ Mutation_Score + offset(log(Unclustered)) + primaryTumorLocation + msStatus + purity,family = tweedie(var.power = p, link.power = 0),  data = df)}
+        beta <- coef(model)["Mutation_Score"]
+        se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
+        p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|t|)"]
+        results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value, Power = p))}
+      results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
+      write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
+    } 
+    if (model_type=="pTweedie_logoSum_pvar_3") {
+      results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c(), Power = c())
+      for (gene in unique(germline$Gene.refGene)){
+        print(gene)
+        df<-germline[which(germline$Gene.refGene == gene),]
+        df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
+        df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"; df$primaryTumorLocation=factor(df$primaryTumorLocation); df$primaryTumorLocation = relevel(df$primaryTumorLocation, ref = "Other")
+        df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"; df$LizaCancerType=factor(df$LizaCancerType); df$LizaCancerType = relevel(df$LizaCancerType, ref = "Other")
+        if (grepl("Clu",signature)){
+          p=as.numeric(sub(".*p=([0-9.]+).*", "\\1",gam(Exposures ~ Mutation_Score + offset(log(Clustered)) + LizaCancerType + msStatus + purity, data = df, family = tw(link="log"), method = "ML")$family$family))
+          model <- glm(Exposures ~ Mutation_Score + offset(log(Clustered)) + LizaCancerType + msStatus + purity, family = tweedie(var.power = p, link.power = 0),  data = df)} 
+        if (grepl("Uclu",signature)){
+          p=as.numeric(sub(".*p=([0-9.]+).*", "\\1",gam(Exposures ~ Mutation_Score + offset(log(Unclustered)) + LizaCancerType + msStatus + purity, data = df, family = tw(link="log"), method = "ML")$family$family))
+          model <- glm(Exposures ~ Mutation_Score + offset(log(Unclustered)) + LizaCancerType + msStatus + purity,family = tweedie(var.power = p, link.power = 0),  data = df)}
+        beta <- coef(model)["Mutation_Score"]
+        se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
+        p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|t|)"]
+        results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value, Power = p))}
+      results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
+      write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
+    } 
     if (model_type=="pGLM_logoSum") {
       results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c())
       for (gene in unique(germline$Gene.refGene)){
         print(gene)
         df<-germline[which(germline$Gene.refGene == gene),]
         df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
-        df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"; df$primaryTumorLocation=factor(df$primaryTumorLocation)
+        df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"; df$primaryTumorLocation=factor(df$primaryTumorLocation); df$primaryTumorLocation = relevel(df$primaryTumorLocation, ref = "Other")
+        df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"; df$LizaCancerType=factor(df$LizaCancerType)
         if (grepl("Clu",signature)){
           model <- glm(Exposures ~ Mutation_Score + offset(log(Clustered)) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender,family = poisson(),  data = df)} 
         if (grepl("Uclu",signature)){
@@ -135,7 +183,8 @@ if (covariates) {
         print(gene)
         df<-germline[which(germline$Gene.refGene == gene),]
         df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
-        df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"; df$primaryTumorLocation=factor(df$primaryTumorLocation)
+        df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"; df$primaryTumorLocation=factor(df$primaryTumorLocation); df$primaryTumorLocation = relevel(df$primaryTumorLocation, ref = "Other")
+        df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"; df$LizaCancerType=factor(df$LizaCancerType)
         if (grepl("Clu",signature)){
           model <- bayesglm(Exposures ~ Mutation_Score + offset(log(Clustered)) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender,family = poisson(),  data = df)} 
         if (grepl("Uclu",signature)){
@@ -153,7 +202,8 @@ if (covariates) {
             print(gene)
             df<-germline[which(germline$Gene.refGene == gene),]
             df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
-            df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"; df$primaryTumorLocation=factor(df$primaryTumorLocation)
+            df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"; df$primaryTumorLocation=factor(df$primaryTumorLocation); df$primaryTumorLocation = relevel(df$primaryTumorLocation, ref = "Other")
+            df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"; df$LizaCancerType=factor(df$LizaCancerType)
             df$Exposures[df$Exposures == 0] <- df$Exposures[df$Exposures == 0] + 0.00001
             df$Exposures[df$Exposures == 1] <- df$Exposures[df$Exposures == 1] - 0.00001
             model <- betareg(Exposures ~ Mutation_Score + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender, data = df)
