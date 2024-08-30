@@ -19,7 +19,7 @@ covariates <- as.logical(args[5])
 
 germline=as.data.frame(fread(input))
 germline %>% pivot_longer(cols = -c(sample, Gene.refGene, Freq, Clustered, Unclustered), names_to = "Signature", values_to = "Exposures") %>% filter(Signature==signature) -> germline
-germline %>% left_join(metadata[,c("sample","gender","purity","ploidy","msStatus","tmbStatus","primaryTumorLocation")]) -> germline
+germline %>% left_join(metadata[,c("sample","gender","purity","ploidy","msStatus","tmbStatus","primaryTumorLocation","LizaCancerType")]) -> germline
 
 # bd.xi <- tweedie.profile(Exposures ~ Mutation_Score + offset(log(Clustered)) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender, data=df,do.plot=TRUE, xi.vec=seq(1.1,1.9,by=0.1))
 # bd.xi$xi.max
