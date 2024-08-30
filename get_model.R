@@ -16,7 +16,6 @@ input <- as.character(args[2])
 model_type <- as.character(args[3])
 metadata <- as.data.frame(fread(args[4])); metadata$LizaCancerType=gsub("_MSI","",metadata$LizaCancerType)
 covariates <- as.logical(args[5])
-var_power <- as.numeric(args[6])
 
 germline=as.data.frame(fread(input))
 germline %>% pivot_longer(cols = -c(sample, Gene.refGene, Freq, Clustered, Unclustered), names_to = "Signature", values_to = "Exposures") %>% filter(Signature==signature) -> germline
@@ -86,8 +85,8 @@ if (covariates) {
             df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
             df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"; df$primaryTumorLocation=factor(df$primaryTumorLocation); df$primaryTumorLocation = relevel(df$primaryTumorLocation, ref = "Other")
             df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"; df$LizaCancerType=factor(df$LizaCancerType); df$LizaCancerType = relevel(df$LizaCancerType, ref = "Other")
-            if (grepl("Clu",signature)){model <- glm(log2(Exposures + 1) ~ Mutation_Score + log(Clustered) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender,family = tweedie(var.power = var_power, link.power = 0),  data = df)} 
-            else {model <- glm(log2(Exposures + 1) ~ Mutation_Score + log(Unclustered) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender,family = tweedie(var.power = var_power, link.power = 0),  data = df)}
+            if (grepl("Clu",signature)){model <- glm(log2(Exposures + 1) ~ Mutation_Score + log(Clustered) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender,family = tweedie(var.power = 1.5, link.power = 0),  data = df)} 
+            else {model <- glm(log2(Exposures + 1) ~ Mutation_Score + log(Unclustered) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender,family = tweedie(var.power = 1.5, link.power = 0),  data = df)}
             beta <- coef(model)["Mutation_Score"]
             se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
             p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|t|)"]
@@ -263,7 +262,7 @@ if (covariates) {
             print(gene)
             df<-germline[which(germline$Gene.refGene == gene),]
             df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
-            if (grepl("Clu",signature)){model <- glm(log2(Exposures + 1) ~ Mutation_Score + log(Clustered),family = tweedie(var.power = var_power, link.power = 0),  data = df)} else {model <- glm(log2(Exposures + 1) ~ Mutation_Score + log(Unclustered),family = tweedie(var.power = var_power, link.power = 0),  data = df)}
+            if (grepl("Clu",signature)){model <- glm(log2(Exposures + 1) ~ Mutation_Score + log(Clustered),family = tweedie(var.power = 1.5, link.power = 0),  data = df)} else {model <- glm(log2(Exposures + 1) ~ Mutation_Score + log(Unclustered),family = tweedie(var.power = 1.5, link.power = 0),  data = df)}
             beta <- coef(model)["Mutation_Score"]
             se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
             p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|t|)"]
