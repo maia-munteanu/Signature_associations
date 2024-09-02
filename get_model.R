@@ -95,7 +95,7 @@ if (covariates) {
         write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
      } 
     if (model_type=="pTweedie_logoSum_pvar") {
-      results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c(), Power = c())
+      results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c(), Power = c(), Deviance=c(), Df=c(), nullDeviance=c(), nullDf=c())
       for (gene in unique(germline$Gene.refGene)){
         print(gene)
         df<-germline[which(germline$Gene.refGene == gene),]
@@ -111,12 +111,13 @@ if (covariates) {
         beta <- coef(model)["Mutation_Score"]
         se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
         p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|t|)"]
-        results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value, Power = p))}
+        results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value, Power = p, Deviance=model$deviance, Df=model$df.residual, nullDeviance=model$null.deviance, nullDf=model$df.null))}
       results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
+      results$PseudoR2 <- 1 - (results$Deviance / results$nullDeviance)
       write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
     } 
     if (model_type=="pTweedie_logoSum_pvar_2") {
-      results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c(), Power = c())
+      results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c(), Power = c(), Deviance=c(), Df=c(), nullDeviance=c(), nullDf=c())
       for (gene in unique(germline$Gene.refGene)){
         print(gene)
         df<-germline[which(germline$Gene.refGene == gene),]
@@ -132,12 +133,13 @@ if (covariates) {
         beta <- coef(model)["Mutation_Score"]
         se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
         p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|t|)"]
-        results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value, Power = p))}
+        results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value, Power = p, Deviance=model$deviance, Df=model$df.residual, nullDeviance=model$null.deviance, nullDf=model$df.null))}
       results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
+      results$PseudoR2 <- 1 - (results$Deviance / results$nullDeviance)
       write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
     } 
     if (model_type=="pTweedie_logoSum_pvar_3") {
-      results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c(), Power = c())
+      results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c(), Power = c(), Deviance=c(), Df=c(), nullDeviance=c(), nullDf=c())
       for (gene in unique(germline$Gene.refGene)){
         print(gene)
         df<-germline[which(germline$Gene.refGene == gene),]
@@ -153,12 +155,13 @@ if (covariates) {
         beta <- coef(model)["Mutation_Score"]
         se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
         p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|t|)"]
-        results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value, Power = p))}
+        results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value, Power = p, Deviance=model$deviance, Df=model$df.residual, nullDeviance=model$null.deviance, nullDf=model$df.null))}
       results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
+      results$PseudoR2 <- 1 - (results$Deviance / results$nullDeviance)
       write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
     } 
     if (model_type=="pGLM_logoSum") {
-      results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c())
+      results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c(), Deviance=c(), Df=c(), nullDeviance=c(), nullDf=c())
       for (gene in unique(germline$Gene.refGene)){
         print(gene)
         df<-germline[which(germline$Gene.refGene == gene),]
@@ -172,12 +175,13 @@ if (covariates) {
         beta <- coef(model)["Mutation_Score"]
         se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
         p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|z|)"]
-        results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value))}
+        results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value, Deviance=model$deviance, Df=model$df.residual, nullDeviance=model$null.deviance, nullDf=model$df.null))}
       results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
+      results$PseudoR2 <- 1 - (results$Deviance / results$nullDeviance)
       write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
     } 
    if (model_type=="bpGLM_logoSum") {
-      results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c())
+      results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c(), Deviance=c(), Df=c(), nullDeviance=c(), nullDf=c())
       for (gene in unique(germline$Gene.refGene)){
         print(gene)
         df<-germline[which(germline$Gene.refGene == gene),]
@@ -191,27 +195,9 @@ if (covariates) {
         beta <- coef(model)["Mutation_Score"]
         se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
         p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|z|)"]
-        results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value))}
+        results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value, Deviance=model$deviance, Df=model$df.residual, nullDeviance=model$null.deviance, nullDf=model$df.null))}
       results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
-      write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
-    } 
-    if (model_type=="nbGLM_logoSum") {
-      results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c())
-      for (gene in unique(germline$Gene.refGene)){
-        print(gene)
-        df<-germline[which(germline$Gene.refGene == gene),]
-        df$Mutation_Score <- ifelse(df$Freq > 0, 1, 0)
-        df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"; df$primaryTumorLocation=factor(df$primaryTumorLocation); df$primaryTumorLocation = relevel(df$primaryTumorLocation, ref = "Other")
-        df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"; df$LizaCancerType=factor(df$LizaCancerType)
-        if (grepl("Clu",signature)){
-          model <- glm.nb(Exposures ~ Mutation_Score + offset(log(Clustered)) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender, data = df)} 
-        if (grepl("Uclu",signature)){
-          model <- glm.nb(Exposures ~ Mutation_Score + offset(log(Unclustered)) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender, data = df)}
-        beta <- coef(model)["Mutation_Score"]
-        se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
-        p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|z|)"]
-        results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value))}
-      results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
+      results$PseudoR2 <- 1 - (results$Deviance / results$nullDeviance)
       write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
     } 
     if (model_type=="beta"){
