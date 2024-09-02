@@ -204,9 +204,9 @@ if (covariates) {
         df$primaryTumorLocation[df$primaryTumorLocation %in%  names(table(df$primaryTumorLocation)[table(df$primaryTumorLocation) < 10])] <- "Other"; df$primaryTumorLocation=factor(df$primaryTumorLocation); df$primaryTumorLocation = relevel(df$primaryTumorLocation, ref = "Other")
         df$LizaCancerType[df$LizaCancerType %in%  names(table(df$LizaCancerType)[table(df$LizaCancerType) < 10])] <- "Other"; df$LizaCancerType=factor(df$LizaCancerType)
         if (grepl("Clu",signature)){
-          model <- glm.nb(Exposures ~ Mutation_Score + offset(log(Clustered)) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender,family = poisson(),  data = df)} 
+          model <- glm.nb(Exposures ~ Mutation_Score + offset(log(Clustered)) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender, data = df)} 
         if (grepl("Uclu",signature)){
-          model <- glm.nb(Exposures ~ Mutation_Score + offset(log(Unclustered)) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender,family = poisson(),  data = df)}
+          model <- glm.nb(Exposures ~ Mutation_Score + offset(log(Unclustered)) + primaryTumorLocation + msStatus + tmbStatus + purity + ploidy + gender, data = df)}
         beta <- coef(model)["Mutation_Score"]
         se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
         p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|z|)"]
