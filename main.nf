@@ -5,9 +5,9 @@
 nextflow.enable.dsl=2
 
 params.input_file = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/GermlineMuts_signatures_indels_rawExp_wSums.tsv"
-params.output_folder = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/pTweedie_Covs_RawExp_logoSum_pvar_2"
+params.output_folder = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/nbGLM_Covs_RawExp_logoSum"
 params.metadata = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Pipeline_inputs/Hartwig_PCAWG_TCGA_MMRF_CPTAC_OVCARE_MUTes.tsv"
-params.model = "pTweedie_logoSum_pvar_2"
+params.model = "nbGLM_logoSum"
 params.covariates = "TRUE"
 
 workflow {
