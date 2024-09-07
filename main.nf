@@ -23,7 +23,7 @@ workflow {
             header.split('\t')[5..-1] 
         }
         .flatMap { it.toList() } 
-    get_model(signatures)
+    //get_model(signatures)
 
     signatures2 = Channel.fromPath(params.input_file2)
         .first()
@@ -36,7 +36,7 @@ workflow {
             header.split('\t')[5..-1] 
         }
         .flatMap { it.toList() } 
-    get_model(signatures2)
+    get_model(signatures,signatures2)
 }
 
 process get_model {
