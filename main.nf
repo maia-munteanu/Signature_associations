@@ -4,8 +4,8 @@
 
 nextflow.enable.dsl=2
 
-params.input_file = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/GermlineMuts_joint_clustered_signatures_indels_rawExp_wSums.tsv"
-//params.input_file = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/GermlineMuts_joint_clustered_signatures_svs_rawExp_wSums.tsv"
+params.input_file = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/GermlineMuts_signatures_indels_rawExp_wSums.tsv"
+//params.input_file = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/GermlineMuts_signatures_svs_rawExp_wSums.tsv"
 params.output_folder = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Germline/pTweedie_Covs_RawExp_logoSumUnclustered_pvar_3_inter"
 params.metadata = "/g/strcombio/fsupek_cancer3/SV_clusters_project/Pipeline_inputs/Hartwig_PCAWG_TCGA_MMRF_CPTAC_OVCARE_MUTes.tsv"
 params.model = "pTweedie_logoSumUnclustered_pvar_3_inter"
