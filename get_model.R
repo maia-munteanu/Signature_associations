@@ -211,7 +211,7 @@ if (covariates) {
       write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
     } 
     if (model_type=="pTweedie_logoSum_pvar_3_inter") {
-      results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c(), Power = c(), Deviance=c(), Df=c(), nullDeviance=c(), nullDf=c(), AIC=c())
+      results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c(), Power = c(), Deviance=c(), Df=c(), nullDeviance=c(), nullDf=c(), AIC=c(), Cooks=c())
       for (gene in unique(germline$Gene.refGene)){
         print(gene)
         df<-germline[which(germline$Gene.refGene == gene),]
@@ -228,13 +228,13 @@ if (covariates) {
         se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
         p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|t|)"]
         AIC <- AICtweedie(model, dispersion=NULL, k = 2, verbose=TRUE)
-        results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value, Power = p, Deviance=model$deviance, Df=model$df.residual, nullDeviance=model$null.deviance, nullDf=model$df.null, AIC=AIC))}
+        results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value, Power = p, Deviance=model$deviance, Df=model$df.residual, nullDeviance=model$null.deviance, nullDf=model$df.null, AIC=AIC, Cooks=cooks.distance(model)))}
       results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
       results$PseudoR2 <- 1 - (results$Deviance / results$nullDeviance)
       write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
     } 
     if (model_type=="pTweedie_logoSumUnclustered_pvar_3_inter") {
-      results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c(), Power = c(), Deviance=c(), Df=c(), nullDeviance=c(), nullDf=c(), AIC=c())
+      results=data.frame(Signature = c(), Gene = c(), Beta = c(), SE = c(), P_Value = c(), Power = c(), Deviance=c(), Df=c(), nullDeviance=c(), nullDf=c(), AIC=c(), Cooks=c())
       for (gene in unique(germline$Gene.refGene)){
         print(gene)
         df<-germline[which(germline$Gene.refGene == gene),]
@@ -247,7 +247,7 @@ if (covariates) {
         se <- summary(model)$coefficients["Mutation_Score", "Std. Error"]
         p_value <- summary(model)$coefficients["Mutation_Score", "Pr(>|t|)"]
         AIC <- AICtweedie(model, dispersion=NULL, k = 2, verbose=TRUE)
-        results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value, Power = p, Deviance=model$deviance, Df=model$df.residual, nullDeviance=model$null.deviance, nullDf=model$df.null, AIC=AIC))}
+        results<-rbind(results,data.frame(Signature = signature, Gene = gene, Beta = beta, SE = se, P_Value = p_value, Power = p, Deviance=model$deviance, Df=model$df.residual, nullDeviance=model$null.deviance, nullDf=model$df.null, AIC=AIC, Cooks=cooks.distance(model)))}
       results$Adjusted_P_Value <- p.adjust(results$P_Value, method = "BH")
       results$PseudoR2 <- 1 - (results$Deviance / results$nullDeviance)
       write.table(results, file = paste0(signature, ".tsv"),quote = FALSE, row.names = FALSE, col.names = TRUE, sep = "\t")
